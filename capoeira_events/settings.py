@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # capoeira_events/settings.py
 from pathlib import Path
 # Adds the imports for authentication backends and SSO providers
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'events',
+    'events.apps.EventsConfig', #was 'events'
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'capoeira_events.urls'
