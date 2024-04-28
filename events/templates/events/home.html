@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capoeira Events</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-light">
+        <div class="container py-3">
+            <h1>Capoeira Events</h1>
+        </div>
+    </header>
+
+    <!-- MAIN FUNCTIONALITY: Zip Code and Create Event Section -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control mb-3" placeholder="Enter Zip Code">
+                </div>
+                <div class="col-md-6 text-right">
+                    <a href="{% url 'create_event' %}" class="btn btn-primary">Create Event</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUE PROPOSITION -->
+    <section class="py-5">
+        <div class="container">
+            <h2>The hub for all Capoeira events</h2>
+            <p>Stop looking through Facebook, Instagram, group chats, and TikTok. Capoeira events make it easy to find and manage your Capoeira events in a single centralized location.</p>
+            <p>If you have trouble advertising your event, Capoeira events have you covered! We'll help announce your events to people in your area!</p>
+        </div>
+    </section>
+    
+    <!-- TESTIMONIALS -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2>What the Capoeira world thinks about us</h2>
+            <!-- Example testimonials -->
+            <!-- Repeat the below block for multiple testimonials -->
+            <div class="testimonial">
+                <p class="testimonial-text">"A fantastic platform that has made event organization a breeze!" - Pedro</p>
+            </div>
+            <!-- ... -->
+        </div>
+    </section>
+
+    <!-- LIST OF FEATURES -->
+    <section class="py-5">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Basic Features</h3>
+                    <ul>
+                        <li>Email newsletter to help capoeiristas find your event</li>
+                        <li>Customizable events pages</li>
+                        <li>Registration and payment handling</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3>Premium Features</h3>
+                    <ul>
+                        <li>Advanced event customization: guest list, social media for guests, and embed videos</li>
+                        <li>Create multiple events at a time</li>
+                        <li>Advanced analytics on your events</li>
+                        <li>Email campaigns for your event</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEEDBACK: FEATURES REQUESTS -->
+    <section class="py-5">
+        <div class="container">
+            <h2>What features would you like to see?</h2>
+            <p>Let us know so we can make this application as strong as our community</p>
+        </div>
+        <div class="google-form">
+            <iframe src="https://docs.google.com/forms/d/e/your-google-form-id/viewform?embedded=true" width="640" height="480" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+    </section>
+
+    <footer class="py-3 bg-dark text-white">
+        <div class="container text-center">
+            <p>Contact us at: your-email@example.com</p>
+        </div>
+    </footer>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
