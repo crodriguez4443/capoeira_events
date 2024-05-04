@@ -1,5 +1,5 @@
 <!-- events/templates/events/create_event.html -->
-{% extends 'events/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 <div class="container mt-5">
@@ -36,22 +36,41 @@
             <label for="description">Description</label>
             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
         </div>
-        <div class="form-group">
-            <label for="image">Event Image</label>
-            <input type="file" class="form-control-file" id="image" name="image">
-        </div>
-        <div class="form-group">
+        <div class="form-row">
+          <div class="col">
             <label for="category">Category</label>
             <select class="form-control" id="category" name="category">
                 {% for choice, display in form.fields.category.choices %}
                     <option value="{{ choice }}">{{ display }}</option>
                 {% endfor %}
             </select>
-        </div>
-        <div class="form-group">
+          </div>
+          <div class="col">
             <label for="date">Date and Time</label>
             <input type="datetime-local" class="form-control" id="date" name="date">
+          </div>
+        </div>  
+        <div class="form-group">
+            <label for="image">Event Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
         </div>
+      <h2>Event Organizer</h2>
+      <div class="form-group">
+        <dive class="form-row">
+          <div class="col">
+            <label for="organizer_name">Organizer Name</label>
+              <input type="text" class="form-control" id="organizer_name" name="organizer_name" placeholder="Enter organizer name">
+          </div>
+          <div class="col">
+              <label for="organizer_email">Organizer Email</label>
+              <input type="email" class="form-control" id="organizer_email" name="organizer_email" placeholder="Enter organizer email">
+          </div>
+          <div class="col">
+            <label for="organizer_social_handle">Organizer Social Handle</label>
+            <input type="text" class="form-control" id="organizer_social_handle" name="organizer_social_handle" placeholder="Enter organizer social media handle">
+          </div>
+        </div>
+      </dive>
         <!-- Repeat similar structure for organizer fields -->
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

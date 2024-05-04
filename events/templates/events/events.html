@@ -1,0 +1,37 @@
+<!-- events page --> 
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-3"> Events</h1>
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                {% if event.image %}
+                <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }} - view event details" loading="lazy">
+                {% else %}
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Default Image" loading="lazy">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text">
+                        {% if event.address %}
+                        {{ event.address }}<br>
+                        {% else %}
+                        Location details not available<br>
+                        {% endif %}
+                        {{ event.city }}, {{ event.state }} {{ event.zip_code }}
+                    </p>
+                    <a href="" class="btn btn-primary">Register</a> 
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No events found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
