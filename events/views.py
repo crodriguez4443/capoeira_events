@@ -1,5 +1,6 @@
 # events/views.py
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
@@ -21,6 +22,11 @@ class CreateEventView(PermissionRequiredMixin, CreateView):
 def events(request):
     events = Event.objects.all()  # Retrieve all events from the database
     return render(request, 'events/events.html', {'events': events})
+
+def event_details(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    return render(request, 'events/event_details.html', {'event': event})
+
 
 class HomePageView(TemplateView):
     template_name = 'events/home.html'

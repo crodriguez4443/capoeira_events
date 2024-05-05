@@ -7,11 +7,11 @@
     <div class="row">
         {% for event in events %}
         <div class="col-md-6 mb-4">
-            <div class="card">
+            <div class="card" >
                 {% if event.image %}
-                <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }} - view event details" loading="lazy">
+                <img src="{{ event.image.url }}" class="card-img-top" style="height: 400px; width: 100%; object-fit: contain;" alt="{{ event.name }} - view event details" loading="lazy">
                 {% else %}
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Default Image" loading="lazy">
+                <img src="https://via.placeholder.com/150" class="card-img-top" style="height: 400px; width: 100%; object-fit: contain;" alt="Default Image" loading="lazy">
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ event.name }}</h5>
@@ -21,9 +21,14 @@
                         {% else %}
                         Location details not available<br>
                         {% endif %}
-                        {{ event.city }}, {{ event.state }} {{ event.zip_code }}
+                        {{ event.city }}, {{ event.state }} {{ event.zip_code }}<br>
+                        {% if event.date %}
+                            Date: {{ event.date|date:"F j, Y" }}  <!-- Format date and time -->
+                        {% else %}
+                            Date: Not specified
+                        {% endif %}
                     </p>
-                    <a href="" class="btn btn-primary">Register</a> 
+                    <a href="{% url 'event_details' event_id=event.id %}" class="btn btn-primary">Event Details</a>
                 </div>
             </div>
         </div>

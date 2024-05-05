@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- First Section -->
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-4 font-weight-bold">{{ event.title }}</h1>
+            <p>{{ event.description }}</p>
+            <a href="#eventTimeline" class="btn btn-link">
+                <i class="fas fa-arrow-down"></i> Click for event details
+            </a>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ event.image.url }}" style="height: 400px; object-fit: contain;" class="img-fluid" alt="{{ event.name }}">
+            <p class="lead">Price: ${{ event.price }}</p>
+            <form>
+                <div class="form-group">
+                    <label for="registrationOptions">Choose an option:</label>
+                    <select class="form-control" id="registrationOptions">
+                        <option>Day 1</option>
+                        <option>Day 1 and 2</option>
+                        <option>Full Event</option>
+                    </select>
+                </div>
+                <h3>Register Now</h3>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Second Section -->
+    <div id="eventTimeline" class="mt-5">
+        <h2>Event Timeline</h2>
+        <ul class="timeline">
+            {% for item in event.timeline %}
+            <li>{{ item.time }}: {{ item.description }}</li>
+            {% endfor %}
+        </ul>
+        <a href="#top" class="btn btn-primary">Register Now</a>
+    </div>
+</div>
+{% endblock %}
