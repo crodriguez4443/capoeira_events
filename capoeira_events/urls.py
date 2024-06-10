@@ -1,7 +1,7 @@
 # capoeira_events/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from events.views import HomePageView, CreateEventView, events, event_details
+from events.views import HomePageView, CreateEventView, events, event_details, edit_event
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('allauth.socialaccount.urls')),
     path('event/<int:event_id>/', event_details, name='event_details'),    # Include other URL definitions as needed
+    path('event/<int:event_id>/edit', edit_event, name='edit_event'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

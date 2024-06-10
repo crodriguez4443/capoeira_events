@@ -3,6 +3,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from geopy.geocoders import Nominatim
 
 class Event(models.Model):
     CATEGORY_CHOICES = [
@@ -26,6 +29,22 @@ class Event(models.Model):
     organizer_social_handle = models.CharField(max_length=50, null=True, blank=True)
     organizer_social_handle_2 = models.CharField(max_length=50, null=True, blank=True)
     date = models.DateTimeField(null=True, blank=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    long = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
+#use geopy to get the lat and long of the address of the event created and store it in the lat and long fields
+@receiver(pre_save, sender=Event)
+def update_lat_long(sender, instance, **kwargs):
+    if instance.address and instance.city and instance.state and instance.zip_code:
+        full_address = f"{instance.address}, {instance.city}, {instance.state}, {instance.zip_code}"
+        try:
+            geolocator = Nominatim(user_agent="Capoeira_Events")
+            location = geolocator.geocode(full_address)
+            if location:
+                instance.lat = location.latitude
+                instance.long = location.longitude
+        except Exception as e:
+            pass
 
 class Attendance(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

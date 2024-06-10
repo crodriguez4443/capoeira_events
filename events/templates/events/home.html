@@ -3,16 +3,141 @@
 
 {% block content %}
 
-    <!-- MAIN FUNCTIONALITY: Zip Code and Create Event Section -->
-    <section class="py-4">
-        <div class="container">
+<!-- MAIN FUNCTIONALITY: Zip Code and Create Event Section -->
+<section class="py-4">
+    <div class="container">
+        <form method="GET" action="" class="form"> 
             <div class="row">
-                <div class="col-md-6">
-                    <input type="text" class="form-control mb-3" placeholder="Enter Zip Code">
+                <!-- Location input for mobile-first design -->
+                <div class="col-12 col-md-6 mb-3">
+                    <input type="text" name="location_query" class="form-control" placeholder="Enter zip code or city" aria-label="Location">
                 </div>
             </div>
+            <div class="row">
+                <br>
+                <!-- Location for search dropdown -->
+                <div class="col-12 col-md-2 mb-3">
+                    <select name="date_range_query" class="form-control" aria-label="select time range?">
+                        <option value="1">Next month</option>
+                        <option value="3">Next 3 months</option>
+                        <option value="6">Next 6 months</option>
+                        <option value="12">Next 12 months</option>
+                    </select>
+                </div>
+                <!-- Search range dropdown -->
+                <div class="col-12 col-md-2 mb-3">
+                    <select name="search_range_query" class="form-control" aria-label="select range">
+                        <option value="10">10 Miles</option>
+                        <option value="50">50 Miles</option>
+                        <option value="100">100 Miles</option>
+                        <option value="200">200 Miles</option>
+                        <option value="400">400 Miles</option>
+                    </select>
+                </div>
+                <!-- Search button -->
+                <div class="col-12 col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- MAP SECTION: Added map div for Leaflet -->
+<section class="py-4">
+    <div class="container">
+        <div id="map" style="width: 100%; height: 400px;"></div>
+    </div>
+</section>
+
+<!-- Include Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    // Initialize the map
+    var map = L.map('map');
+
+    // Check if geolocation is available
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // Set the map view to the current location
+            map.setView([lat, lon], 10.5);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                minZoom: 3,
+                maxZoom: 17,
+                attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+
+            }).addTo(map);
+
+            // Add a marker at the current location
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup(`<b>You are here</b>`).openPopup();
+        }, function(error) {
+            // Handle error and set default view
+            map.setView([0, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                minZoom: 3,
+                maxZoom: 17,
+                attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+        });
+    } else {
+        // Set default view if geolocation is not supported
+        map.setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            minZoom: 3,
+            maxZoom: 17,
+            attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+    }
+</script>
+
+<!-- Events Near Me Section -->
+<section class="py-4">
+    <div class="container">
+        <h2 class="mb-4">Events near me</h2>
+        <div class="row">
+            {% for event in events %}
+            <div class="col-12 col-md-3 mb-4">
+                <div class="card h-100">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" class="card-img-top" style="height: 200px; width: 100%; object-fit: cover;" alt="{{ event.name }} - view event details" loading="lazy">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" class="card-img-top" style="height: 200px; width: 100%; object-fit: cover;" alt="Default Image" loading="lazy">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.name }}</h5>
+                        <p class="card-text">
+                            {{ event.address }}<br>
+                            {{ event.city }}, {{ event.state }} {{ event.zip_code }}<br>
+                            {% if event.date %}
+                                Date: {{ event.date|date:"F j, Y" }}
+                            {% else %}
+                                Date: Not specified
+                            {% endif %}<br>
+                            {% if event.lat and event.long %}
+                                Location: {{ event.lat }}, {{ event.long }}
+                            {% else %}
+                                Location: Not specified
+                            {% endif %}<br> 
+                        </p>
+                        <a href="{% url 'event_details' event_id=event.id %}" class="btn btn-primary">Event Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p>No events found.</p>
+            </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- VALUE PROPOSITION -->
     <section class="py-5">

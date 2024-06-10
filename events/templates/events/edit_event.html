@@ -1,0 +1,78 @@
+<!-- events/templates/events/create_event.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Event</h2>
+    <form method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Event Name</label>
+            <input type="text" class="form-control" id="name" name="name" value= '{{event.name}}' required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" value= '{{event.location}}' required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" name="address" value= '{{event.address}}' required>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" value= '{{event.city}}' required>
+            </div>
+            <div class="col">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" name="state" value= '{{event.state}}' required>
+            </div>
+            <div class="col">
+                <label for="zip_code">ZIP Code</label>
+                <input type="text" class="form-control" id="zip_code" name="zip_code" value= '{{event.zip_code}}' required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" >'{{event.description}}'</textarea>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" name="category">
+                {% for choice, display in form.fields.category.choices %}
+                    <option value="{{ choice }}" {% if event.category == choice %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="col">
+            <label for="date">Date and Time</label>
+            <input type="datetime-local" class="form-control" id="date" name="date" value="{{ event.date|date:"Y-m-d\TH:i" }}">
+          </div>
+        </div>  
+        <div class="form-group">
+            <label for="image">Event Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+        </div>
+      <h2>Event Organizer</h2>
+      <div class="form-group">
+        <dive class="form-row">
+          <div class="col">
+            <label for="organizer_name">Organizer Name</label>
+              <input type="text" class="form-control" id="organizer_name" name="organizer_name" value= '{{event.organizer_name}}'>
+          </div>
+          <div class="col">
+              <label for="organizer_email">Organizer Email</label>
+              <input type="email" class="form-control" id="organizer_email" name="organizer_email" value= '{{event.organizer_email}}'>
+          </div>
+          <div class="col">
+            <label for="organizer_social_handle">Organizer Social Handle</label>
+            <input type="text" class="form-control" id="organizer_social_handle" name="organizer_social_handle" value= '{{event.organizer_social_handle}}'>
+          </div>
+        </div>
+      </dive>
+        <!-- Repeat similar structure for organizer fields -->
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}
