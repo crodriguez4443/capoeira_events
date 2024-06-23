@@ -3,6 +3,7 @@
 
 {% block content %}
 
+
 <!-- MAIN FUNCTIONALITY: Zip Code and Create Event Section -->
 <section class="py-4">
     <div class="container">
@@ -54,47 +55,37 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+
 <script>
     // Initialize the map
-    var map = L.map('map');
+    var map = L.map('map').setView([40.7357, -74.1724], 12); // Default view
 
-    // Check if geolocation is available
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        minZoom: 3,
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Geolocation to center the map
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
-            // Set the map view to the current location
+            // Center the map on the user's location
             map.setView([lat, lon], 10.5);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-                minZoom: 3,
-                maxZoom: 17,
-                attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-
-            }).addTo(map);
-
-            // Add a marker at the current location
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup(`<b>You are here</b>`).openPopup();
-        }, function(error) {
-            // Handle error and set default view
-            map.setView([0, 0], 2);
-            L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-                minZoom: 3,
-                maxZoom: 17,
-                attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            }).addTo(map);
+            L.marker([lat, lon]).addTo(map).bindPopup(`<b>You are here</b>`).openPopup();
         });
-    } else {
-        // Set default view if geolocation is not supported
-        map.setView([0, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            minZoom: 3,
-            maxZoom: 17,
-            attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
     }
+
+    // Retrieve event location data passed from Django
+    const eventLocations = {{ event_locations | safe }};
+
+    // Add event markers
+    eventLocations.forEach(function (location) {
+        L.marker([location.lat, location.long]).addTo(map)
+            .bindPopup('<b>' + location.name + '</b>');
+    });
 </script>
 
 <!-- Events Near Me Section -->

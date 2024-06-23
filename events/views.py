@@ -7,13 +7,21 @@ from django.shortcuts import render
 from .models import Event
 from .forms import EventForm
 from django.conf import settings
+import json
 
 class HomePageView(TemplateView):
     template_name = 'events/home.html'
 
     def get_context_data(self, **kwargs): # class based view for home page
         context = super().get_context_data(**kwargs) # Call the superclass's get_context_data method
-        context['events'] = Event.objects.all()  # Retrieve all events from the database
+        events = Event.objects.all() # Retrieve all events from the database
+        context['events'] = events # Add the events to the context
+        event_locations = [{
+            'lat': float(event.lat), 
+            'long': float(event.long), 
+            'name': event.name
+            } for event in events]
+        context['event_locations'] = json.dumps(event_locations)
         return context
 
 class CreateEventView(CreateView):
@@ -46,3 +54,9 @@ class UpdateEventView(UpdateView):
 
     def get_success_url(self):
         return reverse('event_details', kwargs={'pk': self.object.pk})
+
+#create a function to display all events on the map via their lat/log values
+def mapevents(request): 
+    events = Event.objects.all()
+    event_location = [{'lat': event.lat, 'long': event.long} for event in events]
+    return render(request, 'events/home.html', {'event_location': json.dumps(event_location), 'events': events})
